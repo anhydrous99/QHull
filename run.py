@@ -4,19 +4,22 @@ from matplotlib.backend_bases import button_press_handler
 from matplotlib.figure import Figure
 from scipy.spatial import ConvexHull
 from random import random as r
-from QHull_py import QHull
+from QHull_py import QHull as qh_py
 import tkinter as tk
 import skgeom as sg
+import numpy as np
+import QHull as qh
 import time
 
 
-def qhull_scipy(points):
+def qh_scipy(points):
     array = points_to_np(points)
     hull = ConvexHull(array)
     segments = index_to_segment(points, hull.vertices)
     return segments
 
 
+qh.calc(np.zeros((10, 2)))
 points = []
 root = tk.Tk()
 root.resizable(False, False)
@@ -66,11 +69,11 @@ def _draw():
         des = algo_impl.get()
         t0 = time.time()
         if des == 'python':
-            segments = QHull(points)
+            segments = qh_py(points)
         elif des == 'scipy':
-            segments = qhull_scipy(points)
+            segments = qh_scipy(points)
         t1 = time.time()
-        print((t1 - t0) * 1000)
+        print(f'{(t1 - t0) * 1000} ms')
         redraw_plot(subplot, canvas, points, segments=segments)
     elif len(points) == 2:
         redraw_plot(subplot, canvas, points, segments=[sg.Segment2(points[0], points[1])])

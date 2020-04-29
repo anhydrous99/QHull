@@ -5,7 +5,8 @@
 #include <iostream>
 #include "QHull.h"
 
-Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
-  std::cout << "Hello, World!\n";
-  return points;
+Eigen::MatrixXd QHull(const Eigen::Ref<Eigen::MatrixXd> &points) {
+    std::cout << "Hello, World!\n";
+    Eigen::MatrixXd ab(points);
+    return ab;
 }
