@@ -22,7 +22,7 @@ def qh_scipy(points):
 def qh_wrapper(points):
     array = points_to_np(points)
     np_vert = qh.calc(array)
-    print(np_vert)
+    #print(np_vert)
     segments = []
     for vert_idx in range(np_vert.shape[0] - 1):
         segments.append(sg.Segment2(sg.Point2(np_vert[vert_idx, 0], np_vert[vert_idx, 1]), sg.Point2(np_vert[vert_idx + 1, 0], np_vert[vert_idx + 1, 1])))

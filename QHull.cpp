@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iostream>
 
-void FindHull(std::vector<Eigen::Vector2d> &Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
+void FindHull(std::vector<Eigen::Vector2d> Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
               std::vector<Eigen::Vector2d> &convex_hull);
 
 Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
@@ -15,13 +15,18 @@ Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
     std::vector<Eigen::Vector2d> check_points;
     for (unsigned int i = 0; i < points.rows(); i++)
         check_points.emplace_back(points.row(i));
-    std::sort(check_points.begin(), check_points.end(), [](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
-        return a[0] < b[0];
+//    std::sort(check_points.begin(), check_points.end(), [](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
+//        return a[0] < b[0];
+//    });
+//    convex_hull.push_back(check_points[0]);
+//    convex_hull.push_back(check_points.back());
+//    check_points.erase(check_points.begin());
+//    check_points.erase(check_points.end() - 1);
+    auto [min_it, max_it] = std::minmax_element(check_points.begin(), check_points.end(), [](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
+        return a.x() < b.x();
     });
-    convex_hull.push_back(check_points[0]);
-    convex_hull.push_back(check_points.back());
-    check_points.erase(check_points.begin());
-    check_points.erase(check_points.end());
+    convex_hull.push_back(*min_it);
+    convex_hull.push_back(*max_it);
     // Create line segment from them
     LineSegment segment(convex_hull[0], convex_hull[1]);
 
@@ -40,18 +45,28 @@ Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
     return hull_matrix;
 }
 
-void FindHull(std::vector<Eigen::Vector2d> &Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
+void FindHull(std::vector<Eigen::Vector2d> Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
               std::vector<Eigen::Vector2d> &convex_hull) {
     // If empty return
     if (Sk.empty())
         return;
     // Find maximum element
-    auto max_itr = std::max_element(Sk.begin(), Sk.end(), [&](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
+    double max_element = 0;
+    /*auto max_it = Sk.begin();
+    for (auto it = Sk.begin(); it < Sk.end(); it++) {
+        auto element = distance_line(P, Q, *it);
+        if (max_element < element) {
+            max_element = element;
+            max_it = it;
+        }
+    }*/
+    auto max_it = std::max_element(Sk.begin(), Sk.end(), [&](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
         return distance_line(P, Q, a) < distance_line(P, Q, b);
     });
-    Eigen::Vector2d max_point = *max_itr;
+    Eigen::Vector2d max_point = *max_it;
+    Sk.erase(max_it);
+
     convex_hull.insert(std::find(convex_hull.begin(), convex_hull.end(), Q), max_point);
-    Sk.erase(max_itr);
 
     // Split points based on side of line while not considering points in triangle
     std::vector<Eigen::Vector2d> S1, S2;
