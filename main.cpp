@@ -1,6 +1,8 @@
-#include <iostream>
+#include <pybind11/pybind11.h>
+#include "QHull.h"
 
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-    return 0;
+namespace py = pybind11;
+
+PYBIND11_MODULE(QHull, m) {
+  m.def("QHull", )
 }

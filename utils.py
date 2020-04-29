@@ -152,7 +152,7 @@ def index_to_segment(points: List[sg.Point2], indexes: List[int]) -> List[sg.Seg
     return segments
 
 
-def points_to_segment(points: List[sg.Point2]):
+def points_to_segment(points: List[sg.Point2]) -> List[sg.Segment2]:
     segments = []
     for idx in range(len(points) - 1):
         segments.append(sg.Segment2(points[idx], points[idx + 1]))

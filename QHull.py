@@ -4,7 +4,7 @@ from typing import List
 from utils import split_points, split_points_triangle, points_to_segment
 
 
-def QHull(points: List[sg.Point2]):
+def QHull(points: List[sg.Point2]) -> List[sg.Segment2]:
     """
     An iterative function where each step returns a list of segments that form the polygon at that time
     :param points: A list of points to calculate the hull for
