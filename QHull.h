@@ -7,6 +7,6 @@
 
 #include <Eigen/Core>
 
-Eigen::MatrixXd QHull(const Eigen::Ref<Eigen::MatrixXd> &points);
+Eigen::MatrixXd QHull(Eigen::MatrixXd points);
 
 #endif //QHULL_QHULL_H
