@@ -79,6 +79,7 @@ def _draw():
     if len(points) != 0 and len(points) != 1 and len(points) != 2:
         des = algo_impl.get()
         t0 = time.time()
+        segments = None
         if des == 'python':
             segments = qh_py(points)
         elif des == 'scipy':

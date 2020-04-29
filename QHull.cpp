@@ -7,28 +7,27 @@
 #include <algorithm>
 #include <iostream>
 
-void FindHull(std::vector<Eigen::Vector2d> Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
+void FindHull(std::vector<Eigen::Vector2d> &Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
               std::vector<Eigen::Vector2d> &convex_hull);
 
 Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
     std::vector<Eigen::Vector2d> convex_hull;
-
-    // Find min and max index
-    unsigned int maxIndex, minIndex;
-    points.col(0).maxCoeff(&maxIndex);
-    points.col(0).minCoeff(&minIndex);
-    // Save those points
-    convex_hull.emplace_back(points.row(minIndex));
-    convex_hull.emplace_back(points.row(maxIndex));
-    // Remove said points from matrix
-    //removeRow(points, maxIndex);
-    //removeRow(points, minIndex);
+    std::vector<Eigen::Vector2d> check_points;
+    for (unsigned int i = 0; i < points.rows(); i++)
+        check_points.emplace_back(points.row(i));
+    std::sort(check_points.begin(), check_points.end(), [](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
+        return a[0] < b[0];
+    });
+    convex_hull.push_back(check_points[0]);
+    convex_hull.push_back(check_points.back());
+    check_points.erase(check_points.begin());
+    check_points.erase(check_points.end());
     // Create line segment from them
     LineSegment segment(convex_hull[0], convex_hull[1]);
 
     // Split points based on side from line
     std::vector<Eigen::Vector2d> S1, S2;
-    split_along_line(S1, S2, segment, points);
+    split_along_line(S1, S2, segment, check_points);
 
     FindHull(S1, segment.source, segment.target, convex_hull);
     FindHull(S2, segment.target, segment.source, convex_hull);
@@ -41,7 +40,7 @@ Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
     return hull_matrix;
 }
 
-void FindHull(std::vector<Eigen::Vector2d> Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
+void FindHull(std::vector<Eigen::Vector2d> &Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
               std::vector<Eigen::Vector2d> &convex_hull) {
     // If empty return
     if (Sk.empty())
@@ -51,7 +50,8 @@ void FindHull(std::vector<Eigen::Vector2d> Sk, const Eigen::Vector2d &P, const E
         return distance_line(P, Q, a) < distance_line(P, Q, b);
     });
     Eigen::Vector2d max_point = *max_itr;
-    convex_hull.insert(std::find(convex_hull.begin(), convex_hull.end(), P), max_point);
+    convex_hull.insert(std::find(convex_hull.begin(), convex_hull.end(), Q), max_point);
+    Sk.erase(max_itr);
 
     // Split points based on side of line while not considering points in triangle
     std::vector<Eigen::Vector2d> S1, S2;
