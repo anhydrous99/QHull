@@ -7,7 +7,6 @@
 
 #include <Eigen/StdVector>
 #include <Eigen/Core>
-#include <vector>
 
 // Make sure vectors of eigen vectors are memory aligned
 EIGEN_DEFINE_STL_VECTOR_SPECIALIZATION(Eigen::Vector2d)
@@ -26,6 +25,7 @@ void split_along_line(std::vector<Eigen::Vector2d> &S1, std::vector<Eigen::Vecto
                       const Eigen::MatrixXd &points);
 void split_along_line_trig(std::vector<Eigen::Vector2d> &S1, std::vector<Eigen::Vector2d> &S2, LineSegment line,
                            const Eigen::Vector2d &max_point, const std::vector<Eigen::Vector2d> &points);
+double distance_line(const Eigen::Vector2d &p1, const Eigen::Vector2d &p2, const Eigen::Vector2d &b);
 
 // From https://stackoverflow.com/questions/1903954/is-there-a-standard-sign-function-signum-sgn-in-c-c
 template <typename T> int sgn(T val) {

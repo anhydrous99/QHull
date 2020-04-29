@@ -75,9 +75,15 @@ void split_along_line_trig(std::vector<Eigen::Vector2d> &S1, std::vector<Eigen::
         if (!inTriangle(line.source, line.target, max_point, point)) {
             double value = sgn(ts0 * (point[1] - line.source[1]) - ts1 * (point[0] - line.source[0]));
             if (value > 0)
-                S1.emplace_back(point);
+                S1.push_back(point);
             else if (value < 0)
-                S2.emplace_back(point);
+                S2.push_back(point);
         }
     }
+}
+
+double distance_line(const Eigen::Vector2d &p1, const Eigen::Vector2d &p2, const Eigen::Vector2d &b) {
+    double y2y1 = p2[1] - p1[1];
+    double x2x1 = p2[0] - p1[0];
+    return std::abs((p2[1]-p1[1])*b[0] - (p2[0]-p1[0])*b[1] + p2[0]*p1[1] + p2[1]*p1[0]) / std::sqrt(std::pow(y2y1, 2) + std::pow(x2x1, 2));
 }

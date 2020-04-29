@@ -19,6 +19,17 @@ def qh_scipy(points):
     return segments
 
 
+def qh_wrapper(points):
+    array = points_to_np(points)
+    np_vert = qh.calc(array)
+    print(np_vert)
+    segments = []
+    for vert_idx in range(np_vert.shape[0] - 1):
+        segments.append(sg.Segment2(sg.Point2(np_vert[vert_idx, 0], np_vert[vert_idx, 1]), sg.Point2(np_vert[vert_idx + 1, 0], np_vert[vert_idx + 1, 1])))
+    segments.append(sg.Segment2(sg.Point2(np_vert[-1, 0], np_vert[-1, 1]), sg.Point2(np_vert[0, 0], np_vert[0, 1])))
+    return segments
+
+
 qh.calc(np.zeros((10, 2)))
 points = []
 root = tk.Tk()
@@ -32,7 +43,7 @@ subplot.set_ylim(-1, 1)
 
 canvas = FigureCanvasTkAgg(fig, master=root)
 canvas.draw()
-canvas.get_tk_widget().grid(row=0, column=0, columnspan=4)
+canvas.get_tk_widget().grid(row=0, column=0, columnspan=5)
 v = tk.StringVar()
 algo_impl = tk.StringVar()
 v.set('100')
@@ -72,6 +83,8 @@ def _draw():
             segments = qh_py(points)
         elif des == 'scipy':
             segments = qh_scipy(points)
+        elif des == 'compiled':
+            segments = qh_wrapper(points)
         t1 = time.time()
         print(f'{(t1 - t0) * 1000} ms')
         redraw_plot(subplot, canvas, points, segments=segments)
@@ -87,10 +100,10 @@ q_button = tk.Button(master=root, text='Quit', command=_quit)
 q_button.grid(row=2, column=0)
 
 c_button = tk.Button(master=root, text='clear', command=_clear)
-c_button.grid(row=2, column=3)
+c_button.grid(row=2, column=4)
 
 g_button = tk.Button(master=root, text='Generate', command=_generate)
-g_button.grid(row=1, column=3)
+g_button.grid(row=1, column=4)
 
 nplabel = tk.Label(master=root, text='N Random Points:')
 nplabel.grid(row=1, column=1)
@@ -100,7 +113,9 @@ npentry.grid(row=1, column=2)
 
 python_radio = tk.Radiobutton(master=root, text='Python', variable=algo_impl, value='python', command=_draw)
 scipy_radio = tk.Radiobutton(master=root, text='Scipy', variable=algo_impl, value='scipy', command=_draw)
+compiled_radio = tk.Radiobutton(master=root, text='Compiled', variable=algo_impl, value='compiled', command=_draw)
 python_radio.grid(row=2, column=1)
 scipy_radio.grid(row=2, column=2)
+compiled_radio.grid(row=2, column=3)
 
 tk.mainloop()

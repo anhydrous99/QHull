@@ -5,5 +5,5 @@
 namespace py = pybind11;
 
 PYBIND11_MODULE(QHull, m) {
-  m.def("calc", [](Eigen::MatrixXd& points) { return QHull(points); });
+  m.def("calc", [](const Eigen::MatrixXd& points) { return QHull(points); });
 }
