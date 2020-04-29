@@ -4,7 +4,7 @@ from matplotlib.backend_bases import button_press_handler
 from matplotlib.figure import Figure
 from scipy.spatial import ConvexHull
 from random import random as r
-from QHull import QHull
+from QHull_py import QHull
 import tkinter as tk
 import skgeom as sg
 import time
@@ -34,6 +34,7 @@ v = tk.StringVar()
 algo_impl = tk.StringVar()
 v.set('100')
 algo_impl.set('python')
+
 
 def on_button_press(event):
     if 65 <= event.x <= 450 and 350 >= event.y >= 42:

@@ -4,5 +4,5 @@
 namespace py = pybind11;
 
 PYBIND11_MODULE(QHull, m) {
-  m.def("QHull", )
+  m.def("QHull", &QHull);
 }
