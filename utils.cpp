@@ -5,6 +5,13 @@
 #include "utils.h"
 #include <algorithm>
 
+/*!
+ * Finds on which side of a line a point lies
+ * @param p1 The point
+ * @param p2 A point on the line
+ * @param p3 Another point on the line
+ * @return 0 > if on one side of the line, 0 if on the line, and 0 < otherwise
+ */
 double sign(const Eigen::Vector2d &p1, const Eigen::Vector2d &p2, const Eigen::Vector2d &p3) {
     return (p1.x() - p3.x()) * (p2.y() - p3.y()) - (p2.x() - p3.x()) * (p1.y() - p3.y());
 }

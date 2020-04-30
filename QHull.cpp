@@ -5,7 +5,6 @@
 #include "QHull.h"
 #include "utils.h"
 #include <algorithm>
-#include <iostream>
 
 void FindHull(const std::vector<Eigen::Vector2d> &Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
               std::vector<Eigen::Vector2d> &convex_hull);
@@ -15,13 +14,6 @@ Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
     std::vector<Eigen::Vector2d> check_points;
     for (unsigned int i = 0; i < points.rows(); i++)
         check_points.emplace_back(points.row(i));
-//    std::sort(check_points.begin(), check_points.end(), [](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
-//        return a[0] < b[0];
-//    });
-//    convex_hull.push_back(check_points[0]);
-//    convex_hull.push_back(check_points.back());
-//    check_points.erase(check_points.begin());
-//    check_points.erase(check_points.end() - 1);
     auto [min_it, max_it] = std::minmax_element(check_points.begin(), check_points.end(), [](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
         return a.x() < b.x();
     });
@@ -51,15 +43,6 @@ void FindHull(const std::vector<Eigen::Vector2d> &Sk, const Eigen::Vector2d &P, 
     if (Sk.empty())
         return;
     // Find maximum element
-    /*double max_element = 0;
-    auto max_it = Sk.begin();
-    for (auto it = Sk.begin(); it < Sk.end(); it++) {
-        auto element = distance_line(P, Q, *it);
-        if (max_element < element) {
-            max_element = element;
-            max_it = it;
-        }
-    }*/
     auto max_it = std::max_element(Sk.begin(), Sk.end(), [&](const Eigen::Vector2d &a, const Eigen::Vector2d &b) {
         return distance_line(P, Q, a) < distance_line(P, Q, b);
     });

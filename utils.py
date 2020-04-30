@@ -153,6 +153,11 @@ def index_to_segment(points: List[sg.Point2], indexes: List[int]) -> List[sg.Seg
 
 
 def points_to_segment(points: List[sg.Point2]) -> List[sg.Segment2]:
+    """
+    A List of points to a list of segments
+    :param points: A list of points
+    :return: A list of Segments
+    """
     segments = []
     for idx in range(len(points) - 1):
         segments.append(sg.Segment2(points[idx], points[idx + 1]))
@@ -172,6 +177,12 @@ def seg_side(segment: sg.Segment2, point: sg.Point2) -> int:
 
 
 def split_points(points: List[sg.Point2], segment: sg.Segment2) -> Tuple[List[sg.Point2], List[sg.Point2]]:
+    """
+    Splits a list of points based on which side of a line the points lie
+    :param points: The list of points
+    :param segment: A line segment
+    :return: A tuple of lists of points
+    """
     a = []
     b = []
     for point in points:
@@ -184,11 +195,22 @@ def split_points(points: List[sg.Point2], segment: sg.Segment2) -> Tuple[List[sg
 
 
 def sign(trig: Tuple[sg.Point2, sg.Point2, sg.Point2]) -> float:
+    """
+    Determines on which side of a line a point is
+    :param trig: A Tuple where the first two points lie one the line and the third is the point to check
+    :return: -1 for one side, 0 if the point is on the line, 1 otherwise
+    """
     return (trig[0].x() - trig[2].x()) * (trig[1].y() - trig[2].y()) - \
            (trig[1].x() - trig[2].x()) * (trig[0].y() - trig[2].y())
 
 
-def triangle_isInside(trig: Tuple[sg.Point2, sg.Point2, sg.Point2], point: sg.Point2):
+def triangle_isInside(trig: Tuple[sg.Point2, sg.Point2, sg.Point2], point: sg.Point2) -> bool:
+    """
+    Checks if a point is on a triangle
+    :param trig:
+    :param point:
+    :return: A boolean
+    """
     d1 = sign((point, trig[0], trig[1]))
     d2 = sign((point, trig[1], trig[2]))
     d3 = sign((point, trig[2], trig[0]))
@@ -199,6 +221,12 @@ def triangle_isInside(trig: Tuple[sg.Point2, sg.Point2, sg.Point2], point: sg.Po
 
 def split_points_triangle(points: List[sg.Point2], trig: Tuple[sg.Point2, sg.Point2, sg.Point2]) -> Tuple[
     List[sg.Point2], List[sg.Point2]]:
+    """
+    Splits a list of points depending on which side of a line the points lie on ignoring the points in a triangle
+    :param points:
+    :param trig:
+    :return:
+    """
     a = []
     b = []
     proj = sg.Line2(trig[0], trig[1]).projection(trig[2])

@@ -6,10 +6,10 @@ from utils import split_points, split_points_triangle, points_to_segment
 
 def QHull(points: List[sg.Point2]) -> List[sg.Segment2]:
     """
-    An iterative function where each step returns a list of segments that form the polygon at that time
-    :param points: A list of points to calculate the hull for
+    Finds the convex hull via QuickHull
+    :param points: A list of points to find the convex hull for
+    :return: A list of line segments
     """
-    # Find left most and right most points
     point_list = copy.copy(points)
     hull_points = []
     points.sort(key=lambda point: point.x())
@@ -28,6 +28,14 @@ def QHull(points: List[sg.Point2]) -> List[sg.Segment2]:
 
 
 def _FindHull(s: List[sg.Point2], p: sg.Point2, q: sg.Point2, hull_points: List[sg.Point2]):
+    """
+    A helper function for the QuickHull, uses recursion
+    :param s:
+    :param p:
+    :param q:
+    :param hull_points:
+    :return:
+    """
     if len(s) == 0:
         return
     seg = sg.Segment2(p, q)
