@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <iostream>
 
-void FindHull(std::vector<Eigen::Vector2d> Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
+void FindHull(const std::vector<Eigen::Vector2d> &Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
               std::vector<Eigen::Vector2d> &convex_hull);
 
 Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
@@ -45,14 +45,14 @@ Eigen::MatrixXd QHull(Eigen::MatrixXd points) {
     return hull_matrix;
 }
 
-void FindHull(std::vector<Eigen::Vector2d> Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
+void FindHull(const std::vector<Eigen::Vector2d> &Sk, const Eigen::Vector2d &P, const Eigen::Vector2d &Q,
               std::vector<Eigen::Vector2d> &convex_hull) {
     // If empty return
     if (Sk.empty())
         return;
     // Find maximum element
-    double max_element = 0;
-    /*auto max_it = Sk.begin();
+    /*double max_element = 0;
+    auto max_it = Sk.begin();
     for (auto it = Sk.begin(); it < Sk.end(); it++) {
         auto element = distance_line(P, Q, *it);
         if (max_element < element) {
@@ -64,7 +64,7 @@ void FindHull(std::vector<Eigen::Vector2d> Sk, const Eigen::Vector2d &P, const E
         return distance_line(P, Q, a) < distance_line(P, Q, b);
     });
     Eigen::Vector2d max_point = *max_it;
-    Sk.erase(max_it);
+    //Sk.erase(max_it);
 
     convex_hull.insert(std::find(convex_hull.begin(), convex_hull.end(), Q), max_point);
 
